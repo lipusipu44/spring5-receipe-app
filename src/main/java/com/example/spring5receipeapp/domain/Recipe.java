@@ -1,6 +1,7 @@
 package com.example.spring5receipeapp.domain;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Recipe {
@@ -19,8 +20,11 @@ public class Recipe {
     @Lob
     private Byte[] image;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Notes notes;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Recipe> recipes;
 
     public Long getId() {
         return id;
@@ -100,5 +104,13 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+    }
+
+    public Set<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(Set<Recipe> recipes) {
+        this.recipes = recipes;
     }
 }
