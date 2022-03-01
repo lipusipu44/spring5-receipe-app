@@ -4,7 +4,9 @@ import com.example.spring5receipeapp.domain.Category;
 import com.example.spring5receipeapp.domain.UnitOfMeasure;
 import com.example.spring5receipeapp.repository.CategoryRepository;
 import com.example.spring5receipeapp.repository.UnitOfMeasureRepository;
+import com.example.spring5receipeapp.services.RecipeService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
@@ -12,27 +14,15 @@ import java.util.Optional;
 @Controller
 public class IndexController {
 
-    private CategoryRepository categoryRepository;
-    private UnitOfMeasureRepository unitOfMeasureRepository;
+    private final RecipeService recipeService;
 
-    public IndexController(CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
-        this.categoryRepository = categoryRepository;
-        this.unitOfMeasureRepository = unitOfMeasureRepository;
+    public IndexController(RecipeService recipeService) {
+        this.recipeService = recipeService;
     }
 
     @RequestMapping({"/","","/index"})
-    public String getIndexPage(){
-        Optional<Category> mexican = categoryRepository.findByDescription("Mexican");
-        System.out.println("category by id:"+mexican.get().getId());
-
-        Optional<Category> byId = categoryRepository.findById(1L);
-        System.out.println("category found by id:"+byId.get().getDescription());
-
-        Optional<UnitOfMeasure> pinch = unitOfMeasureRepository.findByDescription("Pinch");
-        System.out.println("Uom is:"+pinch.get().getId());
-
-
-
+    public String getIndexPage(Model model){
+        model.addAttribute("recipes",recipeService.getRecipes());
         return "index";
     }
 }
