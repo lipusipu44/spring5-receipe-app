@@ -1,12 +1,13 @@
 package com.example.spring5receipeapp.services;
 
+import com.example.spring5receipeapp.converters.RecipeCommandToRecipe;
+import com.example.spring5receipeapp.converters.RecipeToRecipeCommand;
 import com.example.spring5receipeapp.domain.Recipe;
 import com.example.spring5receipeapp.repository.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.MockitoSession;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -21,11 +22,15 @@ public class RecipeServiceImplTest {
     RecipeServiceImpl recipeService;
     @Mock
     RecipeRepository recipeRepository;
+    @Mock
+    RecipeCommandToRecipe recipeCommandToRecipe;
+    @Mock
+    RecipeToRecipeCommand recipeToRecipeCommand;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        recipeService=new RecipeServiceImpl(recipeRepository);
+        recipeService=new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
     }
 
     @Test
@@ -37,6 +42,10 @@ public class RecipeServiceImplTest {
         when(recipeRepository.findAll()).thenReturn(recipeHashSet);
         Set<Recipe> recipes = recipeService.getRecipes();
         assertEquals(1,recipes.size());
+        verify(recipeRepository, times(1)).findAll();
+        verify(recipeRepository, never()).findById(anyLong());
+        verify(recipeRepository, times(1)).findAll();
+        verify(recipeRepository, never()).findById(anyLong());
     }
 
     @Test
