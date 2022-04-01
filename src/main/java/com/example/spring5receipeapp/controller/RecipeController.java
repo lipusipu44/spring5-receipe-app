@@ -1,12 +1,17 @@
 package com.example.spring5receipeapp.controller;
 
 import com.example.spring5receipeapp.command.RecipeCommand;
+import com.example.spring5receipeapp.exceptions.NotFoundException;
 import com.example.spring5receipeapp.services.RecipeService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@Slf4j
 public class RecipeController {
 
     private RecipeService recipeService;
@@ -44,6 +49,15 @@ public class RecipeController {
     public String deleteById(@PathVariable String id){
         recipeService.deleteById(Long.valueOf(id));
         return "redirect:/";
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ModelAndView handleNotFound(){
+        log.error("Handling Custom not found exception");
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("404error");
+        return modelAndView;
     }
 
 }
