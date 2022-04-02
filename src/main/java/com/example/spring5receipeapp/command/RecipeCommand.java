@@ -3,6 +3,7 @@ package com.example.spring5receipeapp.command;
 import com.example.spring5receipeapp.domain.Difficulty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.URL;
@@ -19,7 +20,7 @@ import java.util.Set;
 public class RecipeCommand {
     private Long id;
 
-    @NotBlank
+    @NonNull
     @Size(min = 3, max = 255)
     private String description;
 
